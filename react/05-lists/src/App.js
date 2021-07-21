@@ -2,6 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import React from 'react';
 import ContactForm from './components/ContactForm';
+import ContactList from './components/ContactList';
 
 class App extends React.Component {
 	
@@ -36,6 +37,8 @@ class App extends React.Component {
 		return (
 			<div className="App">
 				<ContactForm addToList={this.addToList}/>
+				<hr/>
+				<ContactList list={this.state.list} removeFromList={this.removeFromList}/>
 			</div>
 		);
 	}

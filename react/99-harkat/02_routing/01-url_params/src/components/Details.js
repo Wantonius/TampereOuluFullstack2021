@@ -10,7 +10,7 @@ class Details extends React.Component {
 	}
 
 	componentDidMount() {
-		//TODO: get the id from the url param (this.props.match.params.id) and find the proper index of the hotel object in the list for the details info. Save the index to the state.
+		//TODO: get the id from the url param (this.props.match.params.id) and find the proper index of the hotel object in the list for the details info. Save the index to the state. You can use parseInt javascript function to change the index from string to number. It works like parseInt(string,numberbase) ie let a = parseInt(myNumberAsString,10);
 	}
 	
 	render() {

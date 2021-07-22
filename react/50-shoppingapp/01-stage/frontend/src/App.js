@@ -2,6 +2,8 @@ import logo from './logo.svg';
 import './App.css';
 import React from 'react';
 import ShoppingForm from './components/ShoppingForm';
+import Navbar from './components/Navbar';
+import ShoppingList from './components/ShoppingList';
 import {Switch,Route} from 'react-router-dom';
 
 class App extends React.Component {
@@ -11,6 +13,10 @@ class App extends React.Component {
 		this.state = {
 			list:[]
 		}
+	}
+	
+	componentDidMount() {
+		this.getList();
 	}
 	
 	//REST API
@@ -38,10 +44,37 @@ class App extends React.Component {
 		});
 	}
 	
+	addToList = async (item) => {
+		let request = {
+			method:"POST",
+			mode:"cors",
+			headers:{"Content-type":"application/json"},
+			body:JSON.stringify(item)
+		}
+		const response = await fetch("/api/shopping",request).catch(error => console.log(error));
+		if(!response) {
+			return;
+		}
+		if(response.ok) {
+			this.getList();
+		} else {
+			console.log("Failed to add to list. Server responded with a status:"+response.status)
+		}
+	}
+	
 	render() {
 		return (
 			<div className="App">
-
+				<Navbar/>
+				<hr/>
+				<Switch>
+					<Route exact path="/" render={() => (
+						<ShoppingList list={this.state.list}/>
+					)}/>
+					<Route path="/form" render={() => (
+						<ShoppingForm addToList={this.addToList}/>
+					)}/>				
+				</Switch>
 			</div>
 		);
 	}

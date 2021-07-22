@@ -11,7 +11,8 @@ export default class Row extends React.Component {
 				<Table.Cell>{this.props.item.price}</Table.Cell>
 				<Table.Cell><Button color="red"
 				onClick={() => this.props.changeToRemoveMode(this.props.index)}>Remove</Button></Table.Cell>
-				<Table.Cell><Button color="green">Edit</Button></Table.Cell>
+				<Table.Cell><Button color="green"
+				onClick={() => this.props.changeToEditMode(this.props.index)}>Edit</Button></Table.Cell>
 			</Table.Row>
 		)
 	}

@@ -61,7 +61,24 @@ class App extends React.Component {
 			console.log("Failed to add to list. Server responded with a status:"+response.status)
 		}
 	}
-	
+
+
+	removeFromList = async (id) => {
+		let request = {
+			method:"DELETE",
+			mode:"cors",
+			headers:{"Content-type":"application/json"}
+		}
+		const response = await fetch("/api/shopping/"+id,request).catch(error => console.log(error));
+		if(!response) {
+			return;
+		}
+		if(response.ok) {
+			this.getList();
+		} else {
+			console.log("Failed to remove from list. Server responded with a status:"+response.status)
+		}
+	}	
 	render() {
 		return (
 			<div className="App">
@@ -69,7 +86,8 @@ class App extends React.Component {
 				<hr/>
 				<Switch>
 					<Route exact path="/" render={() => (
-						<ShoppingList list={this.state.list}/>
+						<ShoppingList list={this.state.list}
+							removeFromList={this.removeFromList}/>
 					)}/>
 					<Route path="/form" render={() => (
 						<ShoppingForm addToList={this.addToList}/>

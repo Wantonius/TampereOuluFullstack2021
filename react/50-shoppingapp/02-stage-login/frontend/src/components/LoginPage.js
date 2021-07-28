@@ -18,6 +18,10 @@ export default class LoginPage extends React.Component {
 	}
 	
 	onSubmit = (event) => {
+		if(this.state.username.length < 4 || this.state.password.length < 8) {
+			alert("Username must be atleast four and password atleast eight characters long");
+			return;
+		}
 		let user = {
 			username:this.state.username,
 			password:this.state.password

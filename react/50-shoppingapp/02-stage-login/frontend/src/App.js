@@ -5,7 +5,7 @@ import ShoppingForm from './components/ShoppingForm';
 import Navbar from './components/Navbar';
 import ShoppingList from './components/ShoppingList';
 import LoginPage from './components/LoginPage';
-import {Switch,Route} from 'react-router-dom';
+import {Switch,Route,Redirect} from 'react-router-dom';
 
 class App extends React.Component {
 	
@@ -102,13 +102,36 @@ class App extends React.Component {
 		}			
 	}
 	
+	logout = async () => {
+		let request = {
+			method:"POST",
+			mode:"cors",
+			headers:{"Content-type":"application/json",
+					"token":this.state.token}
+		}
+		let response = await fetch("/logout",request).catch(error => {
+			console.log("There was an error");
+			this.clearState();
+		})
+		if(!response) {
+			return;
+		}
+		if(response.ok) {
+			this.clearState();
+		} else {
+			this.clearState();
+			console.log("Server responded with a status:"+response.status);
+		}
+	}
+	
 	//REST API
 	
 	getList = () => {
 		let request = {
 			method:"GET",
 			mode:"cors",
-			headers:{"Content-type":"application/json"}
+			headers:{"Content-type":"application/json",
+					"token":this.state.token}
 		}
 		fetch("/api/shopping",request).then(response => {
 			if(response.ok) {
@@ -131,7 +154,8 @@ class App extends React.Component {
 		let request = {
 			method:"POST",
 			mode:"cors",
-			headers:{"Content-type":"application/json"},
+			headers:{"Content-type":"application/json",
+						"token":this.state.token},
 			body:JSON.stringify(item)
 		}
 		const response = await fetch("/api/shopping",request).catch(error => console.log(error));
@@ -150,7 +174,8 @@ class App extends React.Component {
 		let request = {
 			method:"DELETE",
 			mode:"cors",
-			headers:{"Content-type":"application/json"}
+			headers:{"Content-type":"application/json",
+						"token":this.state.token}
 		}
 		const response = await fetch("/api/shopping/"+id,request).catch(error => console.log(error));
 		if(!response) {
@@ -167,7 +192,8 @@ class App extends React.Component {
 		let request = {
 			method:"PUT",
 			mode:"cors",
-			headers:{"Content-type":"application/json"},
+			headers:{"Content-type":"application/json",
+					"token":this.state.token},
 			body:JSON.stringify(item)
 		}
 		const response = await fetch("/api/shopping/"+item.id,request).catch(error => console.log(error));
@@ -184,20 +210,29 @@ class App extends React.Component {
 	render() {
 		return (
 			<div className="App">
-				<Navbar/>
+				<Navbar logout={this.logout} isLogged={this.state.isLogged}/>
 				<hr/>
 				<Switch>
-					<Route exact path="/" render={() => (
-						<LoginPage register={this.register} login={this.login}/>
-					)}/>
-					<Route path="/list" render={() => (
-						<ShoppingList list={this.state.list}
+					<Route exact path="/" render={() => this.state.isLogged ? 
+						(<Redirect to="/list"/>) 
+						: 
+						(<LoginPage register={this.register} login={this.login}/>)
+					}/>
+					<Route path="/list" render={() => this.state.isLogged ? (<ShoppingList list={this.state.list}
 							removeFromList={this.removeFromList}
-							editItem={this.editItem}/>
-					)}/>
-					<Route path="/form" render={() => (
-						<ShoppingForm addToList={this.addToList}/>
-					)}/>				
+							editItem={this.editItem}/>)
+						: 
+						(<Redirect to="/"/>)
+					}/>
+					<Route path="/form" render={() => this.state.isLogged? (<ShoppingForm addToList={this.addToList}/>)
+						:
+						(<Redirect to="/"/>)
+					}/>
+					<Route render={() => this.state.isLogged ? 
+						(<Redirect to="list"/>)
+						:
+						(<Redirect to="/"/>)
+					}/>
 				</Switch>
 			</div>
 		);

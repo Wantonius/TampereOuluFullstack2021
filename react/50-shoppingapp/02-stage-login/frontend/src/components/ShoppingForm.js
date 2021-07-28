@@ -20,6 +20,9 @@ export default class ShoppingForm extends React.Component {
 	
 	onSubmit = (event) => {
 		event.preventDefault();
+		if(!this.state.type) {
+			return;
+		}
 		let item = {
 			...this.state
 		}

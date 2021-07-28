@@ -138,11 +138,17 @@ class App extends React.Component {
 				response.json().then(data => {
 					this.setState({
 						list:data
+					}, () => {
+						this.saveToStorage();
 					})
 				}).catch(error => {
 					console.log("Failed to parse JSON, reason:"+error)
 				})
 			} else {
+				if(response.status === 403) {
+					console.log("Session has expired. Logging out!");
+					this.clearState();
+				}
 				console.log("Server responded with a status:"+response.status);
 			}
 		}).catch(error => {
@@ -165,6 +171,10 @@ class App extends React.Component {
 		if(response.ok) {
 			this.getList();
 		} else {
+			if(response.status === 403) {
+				console.log("Session has expired. Logging out!");
+				this.clearState();
+			}
 			console.log("Failed to add to list. Server responded with a status:"+response.status)
 		}
 	}
@@ -184,6 +194,10 @@ class App extends React.Component {
 		if(response.ok) {
 			this.getList();
 		} else {
+			if(response.status === 403) {
+				console.log("Session has expired. Logging out!");
+				this.clearState();
+			}
 			console.log("Failed to remove from list. Server responded with a status:"+response.status)
 		}
 	}
@@ -203,6 +217,10 @@ class App extends React.Component {
 		if(response.ok) {
 			this.getList();
 		} else {
+			if(response.status === 403) {
+				console.log("Session has expired. Logging out!");
+				this.clearState();
+			}
 			console.log("Failed to edit item. Server responded with a status:"+response.status)
 		}
 	}

@@ -112,6 +112,20 @@ app.post("/login",function(req,res) {
 			if(!success) {
 				return res.status(401).json({message:"Unauthorized"});
 			}
+			let token = createToken();
+			let now = Date.now();
+			let session = new sessionModel({
+				user:user.username,
+				ttl:now+time_to_live_diff,
+				token:token
+			})
+			session.save(function(err) {
+				if(err) {
+					console.log("Saving session failed. Reason:",err)
+					return res.status(500).json({message:"Internal server error"})					
+				}
+				return res.status(200).json({"token":token})
+			})
 		})
 	})
 });

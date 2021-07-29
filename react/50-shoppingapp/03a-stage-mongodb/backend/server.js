@@ -148,13 +148,12 @@ app.post("/logout",function(req,res) {
 	if(!req.headers.token) {
 		return res.status(404).json({message:"not found"});
 	}
-	for(let i=0;i<loggedSessions.length;i++) {
-		if(req.headers.token === loggedSessions[i].token) {
-			loggedSessions.splice(i,1);
-			return res.status(200).json({message:"logged out!"})
+	sessionModel.deleteOne({"token":req.headers.token},function(err) {
+		if(err) {
+			console.log("Failed to remove session in logout. Reason:",err)
 		}
-	}
-	return res.status(404).json({message:"not found"});
+		return res.status(200).json({message:"logged out!"});
+	})
 })
 
 app.use("/api",isUserLogged,apiroute);

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Table} from 'semantic-ui-react';
+import {Table,Button} from 'semantic-ui-react';
 import Row from './Row';
 import RemoveRow from './RemoveRow';
 import EditRow from './EditRow';
@@ -10,8 +10,22 @@ export default class ShoppingList extends React.Component {
 		super(props) 
 		this.state = {
 			removeIndex:-1,
-			editIndex:-1
+			editIndex:-1,
+			search:""
 		}
+	}
+	
+	onChange = (event) => {
+		this.setState({
+			[event.target.name]:event.target.value
+		})
+	}
+	
+	searchByType = () => {
+		this.props.getList(this.state.search);
+		this.setState({
+			search:""
+		})
 	}
 	
 	changeToRemoveMode = (index) => {
@@ -48,18 +62,25 @@ export default class ShoppingList extends React.Component {
 	render() {
 		let items = this.props.list.map((item,index) => {
 			if(this.state.removeIndex === index) {
-				return (<RemoveRow key={item.id} item={item} 
+				return (<RemoveRow key={item._id} item={item} 
 				removeFromList={this.removeFromList} cancel={this.cancel}/>)				
 			}
 			if(this.state.editIndex === index) {
-				return (<EditRow key={item.id} item={item}
+				return (<EditRow key={item._id} item={item}
 				editItem={this.editItem} cancel={this.cancel}/>)
 			}
-			return (<Row key={item.id} item={item} index={index}
+			return (<Row key={item._id} item={item} index={index}
 				changeToRemoveMode={this.changeToRemoveMode}
 				changeToEditMode={this.changeToEditMode}/>)
 		})
 		return(
+		<div>
+			<label htmlFor="search">Search by type:</label>
+			<input type="text"
+					name="search"
+					onChange={this.onChange}
+					value={this.state.search}/>
+			<Button onClick={this.searchByType} style={{marginLeft:10}}>Search</Button>
 			<Table striped>
 				<Table.Header>
 					<Table.HeaderCell>Item type</Table.HeaderCell>
@@ -72,6 +93,7 @@ export default class ShoppingList extends React.Component {
 				{items}
 				</Table.Body>
 			</Table>
+		</div>
 		)
 	}
 }

@@ -1,28 +1,44 @@
 const express = require("express");
+const itemModel = require("../models/item");
 
 let router = express.Router();
-
-//DATABASE
-
-let database = [];
-let id = 100;
 
 //REST API
 
 router.get("/shopping",function(req,res) {
-	let tempDatabase = database.filter(item => item.user === req.session.user)
-	return res.status(200).json(tempDatabase);
+	let query = {"user":req.session.user};
+	if(req.query.type) {
+		query["type"] = req.query.type.toLowerCase();
+	}
+	itemModel.find(query,function(err,items) {
+		if(err) {
+			console.log("Failed to find items. Reason:",err)
+			return res.status(500).json({message:"Internal server error"})
+		}
+		return res.status(200).json(items);
+	})
 });
 
 router.post("/shopping",function(req,res) {
-	let item = {
-		...req.body,
-		user:req.session.user,
-		id:id
+	if(!req.body) {
+		return res.status(400).json({message:"Bad request"});
 	}
-	id++;
-	database.push(item);
-	return res.status(201).json({message:"success!"});
+	if(!req.body.type) {
+		return res.status(400).json({message:"Bad request"});
+	}
+	let item = new itemModel({
+		user:req.session.user,
+		type:req.body.type.toLowerCase(),
+		count:req.body.count,
+		price:req.body.price
+	})
+	item.save(function(err) {
+		if(err) {
+			console.log("Failed to save item. Reason:",err)
+			return res.status(500).json({message:"Internal server error"})
+		}	
+		return res.status(201).json({message:"success!"});
+	})
 })
 
 router.delete("/shopping/:id",function(req,res) {

@@ -126,14 +126,18 @@ class App extends React.Component {
 	
 	//REST API
 	
-	getList = () => {
+	getList = (search) => {
 		let request = {
 			method:"GET",
 			mode:"cors",
 			headers:{"Content-type":"application/json",
 					"token":this.state.token}
 		}
-		fetch("/api/shopping",request).then(response => {
+		let url = "/api/shopping"
+		if(search) {
+			url = url + "?type="+search;
+		}
+		fetch(url,request).then(response => {
 			if(response.ok) {
 				response.json().then(data => {
 					this.setState({
@@ -210,7 +214,7 @@ class App extends React.Component {
 					"token":this.state.token},
 			body:JSON.stringify(item)
 		}
-		const response = await fetch("/api/shopping/"+item.id,request).catch(error => console.log(error));
+		const response = await fetch("/api/shopping/"+item._id,request).catch(error => console.log(error));
 		if(!response) {
 			return;
 		}
@@ -238,7 +242,8 @@ class App extends React.Component {
 					}/>
 					<Route path="/list" render={() => this.state.isLogged ? (<ShoppingList list={this.state.list}
 							removeFromList={this.removeFromList}
-							editItem={this.editItem}/>)
+							editItem={this.editItem}
+							getList={this.getList}/>)
 						: 
 						(<Redirect to="/"/>)
 					}/>

@@ -21,8 +21,6 @@ mongoose.connect("mongodb+srv://"+mongo_user+":"+mongo_password+"@"+mongo_url+"/
 	(error) => console.log("Failed to connect to MongoDB, reason:"+error)
 )
 
-let registeredUsers = [];
-let loggedSessions = [];
 let time_to_live_diff = 3600000;
 
 //MIDDLEWARE
@@ -98,32 +96,24 @@ app.post("/login",function(req,res) {
 	if(req.body.username.length < 4 || req.body.password.length < 8) {
 		return res.status(400).json({message:"Bad Request 3"});
 	}
-	for(let i=0;i<registeredUsers.length;i++) {
-		if(registeredUsers[i].username === req.body.username) {
-			bcrypt.compare(req.body.password,registeredUsers[i].password,function(err,success) {
-				if(err) {
-					return res.status(400).json({message:"Bad Request 4"})
-				}
-				if(!success) {
-					return res.status(401).json({message:"Unauthorized"})
-				}
-				let token = createToken();
-				if(!token) {
-					return res.status(400).json({message:"Bad Request 5"})
-				}
-				let now = Date.now();
-				let session = {
-					user:req.body.username,
-					ttl:now+time_to_live_diff,
-					token:token
-				}
-				loggedSessions.push(session);
-				return res.status(200).json({token:token});
-			})
-			return;
+	userModel.findOne({"username":req.body.username}, function(err,user) {
+		if(err) {
+			console.log("Failed in finding user. Reason:"+err)
+			return res.status(500).json({message:"Internal server error"})
 		}
-	}
-	return res.status(401).json({message:"Unauthorized"});
+		if(!user) {
+			return res.status(401).json({message:"Unauthorized"});
+		}
+		bcrypt.compare(req.body.password,user.password,function(err,success) {
+			if(err) {
+				console.log("Comparing passwords failed. Reason:",err)
+				return res.status(500).json({message:"Internal server error"})
+			}
+			if(!success) {
+				return res.status(401).json({message:"Unauthorized"});
+			}
+		})
+	})
 });
 
 app.post("/logout",function(req,res) {

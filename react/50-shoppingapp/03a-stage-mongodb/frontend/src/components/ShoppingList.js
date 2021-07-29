@@ -11,7 +11,8 @@ export default class ShoppingList extends React.Component {
 		this.state = {
 			removeIndex:-1,
 			editIndex:-1,
-			search:""
+			search:"",
+			price:0
 		}
 	}
 	
@@ -22,9 +23,14 @@ export default class ShoppingList extends React.Component {
 	}
 	
 	searchByType = () => {
-		this.props.getList(this.state.search);
+		if(this.state.price) {		
+			this.props.getList(this.state.search,this.state.price);
+		} else {
+			this.props.getList(this.state.search)	
+		}	
 		this.setState({
-			search:""
+			search:"",
+			price:0
 		})
 	}
 	
@@ -80,6 +86,12 @@ export default class ShoppingList extends React.Component {
 					name="search"
 					onChange={this.onChange}
 					value={this.state.search}/>
+			<label htmlFor="price">Costing maximum of:</label>
+			<input type="number"
+					name="price"
+					step="0.01"
+					onChange={this.onChange}
+					value={this.state.price}/>
 			<Button onClick={this.searchByType} style={{marginLeft:10}}>Search</Button>
 			<Table striped>
 				<Table.Header>

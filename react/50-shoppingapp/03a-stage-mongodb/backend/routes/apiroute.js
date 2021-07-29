@@ -10,6 +10,9 @@ router.get("/shopping",function(req,res) {
 	if(req.query.type) {
 		query["type"] = req.query.type.toLowerCase();
 	}
+	if(req.query.price) {
+		query["price"]= {$lte:req.query.price}
+	}
 	itemModel.find(query,function(err,items) {
 		if(err) {
 			console.log("Failed to find items. Reason:",err)

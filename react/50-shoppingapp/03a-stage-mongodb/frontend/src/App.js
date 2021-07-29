@@ -126,7 +126,7 @@ class App extends React.Component {
 	
 	//REST API
 	
-	getList = (search) => {
+	getList = (search,price) => {
 		let request = {
 			method:"GET",
 			mode:"cors",
@@ -136,6 +136,9 @@ class App extends React.Component {
 		let url = "/api/shopping"
 		if(search) {
 			url = url + "?type="+search;
+			if(price) {
+				url = url + "&price="+price;
+			}
 		}
 		fetch(url,request).then(response => {
 			if(response.ok) {

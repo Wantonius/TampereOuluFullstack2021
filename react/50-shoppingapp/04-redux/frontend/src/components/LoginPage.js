@@ -1,7 +1,9 @@
 import React from 'react';
 import {Form,Button} from 'semantic-ui-react';
+import {connect} from 'react-redux';
+import {register} from '../actions/loginActions';
 
-export default class LoginPage extends React.Component {
+class LoginPage extends React.Component {
 
 	constructor(props) {
 		super(props);
@@ -27,7 +29,7 @@ export default class LoginPage extends React.Component {
 			password:this.state.password
 		}
 		if(event.target.name === "register") {
-			this.props.register(user)
+			this.props.dispatch(register(user));
 		} else {
 			this.props.login(user);
 		}
@@ -59,3 +61,5 @@ export default class LoginPage extends React.Component {
 		)
 	}
 }
+
+export default connect()(LoginPage);

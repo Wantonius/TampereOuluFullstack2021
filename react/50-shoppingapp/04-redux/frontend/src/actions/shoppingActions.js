@@ -54,6 +54,97 @@ export const getList = (token,search,price) => {
 	}
 }	
 
+export const addToList = (token,item) => {
+	return async (dispatch) => {
+		let request = {
+			method:"POST",
+			mode:"cors",
+			headers:{"Content-type":"application/json",
+						"token":token},
+			body:JSON.stringify(item)
+		}
+		dispatch(loading());
+		const response = await fetch("/api/shopping",request).catch(error => console.log(error));
+		dispatch(stopLoading());
+		if(!response) {
+			dispatch(addItemFailed("Add new item failed. There was an error"));
+			return;
+		}
+		if(response.ok) {
+			dispatch(addItemSuccess());
+			dispatch(getList(token));
+		} else {
+			if(response.status === 403) {
+				dispatch(clearLoginState());
+				dispatch(clearShoppingState());
+				dispatch(addItemFailed("Session has expired! Logging you out."));
+			} else {
+				dispatch(addItemFailed("Failed to add to list. Server responded with a status:"+response.statusText))
+			}
+		}
+	}
+}
+
+export const removeFromList = (token,id) => {
+	return async (dispatch) => {
+		let request = {
+			method:"DELETE",
+			mode:"cors",
+			headers:{"Content-type":"application/json",
+						"token":token}
+		}
+		dispatch(loading());
+		const response = await fetch("/api/shopping/"+id,request).catch(error => console.log(error));
+		dispatch(stopLoading());
+		if(!response) {
+			dispatch(removeItemFailed("Remove item failed. There was an error"));
+			return;
+		}
+		if(response.ok) {
+			dispatch(removeItemSuccess());
+			dispatch(getList(token));
+		} else {
+			if(response.status === 403) {
+				dispatch(clearLoginState());
+				dispatch(clearShoppingState());
+				dispatch(removeItemFailed("Session has expired! Logging you out."));
+			} else {
+				dispatch(removeItemFailed("Failed to remove item. Server responded with a status:"+response.statusText))
+			}
+		}
+	}
+}
+
+export const editItem = (token,item) => {
+	return async (dispatch) => {
+		let request = {
+			method:"PUT",
+			mode:"cors",
+			headers:{"Content-type":"application/json",
+					"token":token},
+			body:JSON.stringify(item)
+		}
+		dispatch(loading());
+		const response = await fetch("/api/shopping/"+item._id,request).catch(error => console.log(error));
+		dispatch(stopLoading());
+		if(!response) {
+			dispatch(editItemFailed("Edit item failed. There was an error"));
+			return;
+		}
+		if(response.ok) {
+			dispatch(editItemSuccess());
+			dispatch(getList(token));
+		} else {
+			if(response.status === 403) {
+				dispatch(clearLoginState());
+				dispatch(clearShoppingState());
+				dispatch(editItemFailed("Session has expired! Logging you out."));
+			} else {
+				dispatch(editItemFailed("Failed to edit item. Server responded with a status:"+response.statusText))
+			}
+		}
+	}
+}
 //ACTION CREATORS
 
 export const fetchListSuccess = (list) => {

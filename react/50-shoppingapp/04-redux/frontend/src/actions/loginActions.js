@@ -38,6 +38,63 @@ export const register = (user) => {
 		}
 	}
 }
+
+	
+export const login = (user) => {
+	return async (dispatch) => {
+		let request = {
+			method:"POST",
+			mode:"cors",
+			headers:{"Content-type":"application/json"},
+			body:JSON.stringify(user)
+		}
+		dispatch(loading());
+		let response = await fetch("/login",request).catch(error => {
+			console.log("There was an error:"+error)
+		});
+		if(!response) {
+			dispatch(loginFailed("There was an error in the connection. Login failed!"));
+			return;
+		}
+		if(response.ok) {
+			let data = await response.json().catch(error => {
+				console.log("Error parsing json:"+error);
+			});
+			if(!data) {
+				dispatch(loginFailed("Failed to parse login information. Login failed!"))
+				return;
+			}
+			dispatch(loginSuccess(data.token));
+		} else {
+			dispatch(loginFailed("Login failed. Server responded with a status:"+response.statusText));
+		}			
+	}
+}	
+
+
+export const logout = (token) => {
+	return async (dispatch) => {
+		let request = {
+			method:"POST",
+			mode:"cors",
+			headers:{"Content-type":"application/json",
+					"token":token}
+		}
+		dispatch(loading());
+		let response = await fetch("/logout",request).catch(error => {
+			console.log("There was an error");
+		})
+		if(!response) {
+			dispatch(logoutFailed("There was an error. Logging you out!"))
+			return;
+		}
+		if(response.ok) {
+			dispatch(logoutSuccess());
+		} else {
+			dispatch(logoutFailed("Logging you out. Server responded with a status:"+response.statusText))
+		}
+	}
+}
 //ACTION CREATORS
 
 export const loading = () => {

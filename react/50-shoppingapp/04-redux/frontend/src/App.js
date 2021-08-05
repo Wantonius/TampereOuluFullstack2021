@@ -6,102 +6,22 @@ import Navbar from './components/Navbar';
 import ShoppingList from './components/ShoppingList';
 import LoginPage from './components/LoginPage';
 import {Switch,Route,Redirect} from 'react-router-dom';
+import {connect} from 'react-redux';
 
 class App extends React.Component {
 	
 	constructor(props) {
 		super(props);
 		this.state = {
-			list:[],
-			isLogged:false,
-			token:""
+			list:[]
 		}
 	}
-	
-	componentDidMount() {
-		if(sessionStorage.getItem("state")) {
-			let state = JSON.parse(sessionStorage.getItem("state"));
-			this.setState(state,() => {
-				if(this.state.isLogged) {
-					this.getList();
-				}
-			})
-		}
-		
-	}
-	
-	clearState = () => {
-		this.setState({
-			list:[],
-			isLogged:false,
-			token:""
-		}, () => {
-			this.saveToStorage()
-		})
-	}
-	
-	saveToStorage = () => {
-		sessionStorage.setItem("state",JSON.stringify(this.state));
-	}
+
 	
 	//LOGIN API
 	
 
-	
-	login = async (user) => {
-		let request = {
-			method:"POST",
-			mode:"cors",
-			headers:{"Content-type":"application/json"},
-			body:JSON.stringify(user)
-		}
-		let response = await fetch("/login",request).catch(error => {
-			console.log("There was an error:"+error)
-		});
-		if(!response) {
-			return;
-		}
-		if(response.ok) {
-			let data = await response.json().catch(error => {
-				console.log("Error parsing json:"+error);
-			});
-			if(!data) {
-				console.log("Failed to parse json")
-				return;
-			}
-			this.setState({
-				isLogged:true,
-				token:data.token
-			}, () => {
-				this.saveToStorage();
-				this.getList();
-			})
-		} else {
-			console.log("Server responded with a status:"+response.status)
-		}			
-	}
-	
-	logout = async () => {
-		let request = {
-			method:"POST",
-			mode:"cors",
-			headers:{"Content-type":"application/json",
-					"token":this.state.token}
-		}
-		let response = await fetch("/logout",request).catch(error => {
-			console.log("There was an error");
-			this.clearState();
-		})
-		if(!response) {
-			return;
-		}
-		if(response.ok) {
-			this.clearState();
-		} else {
-			this.clearState();
-			console.log("Server responded with a status:"+response.status);
-		}
-	}
+
 	
 	//REST API
 	
@@ -110,7 +30,7 @@ class App extends React.Component {
 			method:"GET",
 			mode:"cors",
 			headers:{"Content-type":"application/json",
-					"token":this.state.token}
+					"token":this.props.token}
 		}
 		let url = "/api/shopping"
 		if(search) {
@@ -124,8 +44,6 @@ class App extends React.Component {
 				response.json().then(data => {
 					this.setState({
 						list:data
-					}, () => {
-						this.saveToStorage();
 					})
 				}).catch(error => {
 					console.log("Failed to parse JSON, reason:"+error)
@@ -133,7 +51,6 @@ class App extends React.Component {
 			} else {
 				if(response.status === 403) {
 					console.log("Session has expired. Logging out!");
-					this.clearState();
 				}
 				console.log("Server responded with a status:"+response.status);
 			}
@@ -147,7 +64,7 @@ class App extends React.Component {
 			method:"POST",
 			mode:"cors",
 			headers:{"Content-type":"application/json",
-						"token":this.state.token},
+						"token":this.props.token},
 			body:JSON.stringify(item)
 		}
 		const response = await fetch("/api/shopping",request).catch(error => console.log(error));
@@ -159,7 +76,6 @@ class App extends React.Component {
 		} else {
 			if(response.status === 403) {
 				console.log("Session has expired. Logging out!");
-				this.clearState();
 			}
 			console.log("Failed to add to list. Server responded with a status:"+response.status)
 		}
@@ -171,7 +87,7 @@ class App extends React.Component {
 			method:"DELETE",
 			mode:"cors",
 			headers:{"Content-type":"application/json",
-						"token":this.state.token}
+						"token":this.props.token}
 		}
 		const response = await fetch("/api/shopping/"+id,request).catch(error => console.log(error));
 		if(!response) {
@@ -182,7 +98,6 @@ class App extends React.Component {
 		} else {
 			if(response.status === 403) {
 				console.log("Session has expired. Logging out!");
-				this.clearState();
 			}
 			console.log("Failed to remove from list. Server responded with a status:"+response.status)
 		}
@@ -193,7 +108,7 @@ class App extends React.Component {
 			method:"PUT",
 			mode:"cors",
 			headers:{"Content-type":"application/json",
-					"token":this.state.token},
+					"token":this.props.token},
 			body:JSON.stringify(item)
 		}
 		const response = await fetch("/api/shopping/"+item._id,request).catch(error => console.log(error));
@@ -205,7 +120,6 @@ class App extends React.Component {
 		} else {
 			if(response.status === 403) {
 				console.log("Session has expired. Logging out!");
-				this.clearState();
 			}
 			console.log("Failed to edit item. Server responded with a status:"+response.status)
 		}
@@ -214,26 +128,26 @@ class App extends React.Component {
 	render() {
 		return (
 			<div className="App">
-				<Navbar logout={this.logout} isLogged={this.state.isLogged}/>
+				<Navbar />
 				<hr/>
 				<Switch>
-					<Route exact path="/" render={() => this.state.isLogged ? 
+					<Route exact path="/" render={() => this.props.isLogged ? 
 						(<Redirect to="/list"/>) 
 						: 
-						(<LoginPage login={this.login}/>)
+						(<LoginPage />)
 					}/>
-					<Route path="/list" render={() => this.state.isLogged ? (<ShoppingList list={this.state.list}
+					<Route path="/list" render={() => this.props.isLogged ? (<ShoppingList list={this.state.list}
 							removeFromList={this.removeFromList}
 							editItem={this.editItem}
 							getList={this.getList}/>)
 						: 
 						(<Redirect to="/"/>)
 					}/>
-					<Route path="/form" render={() => this.state.isLogged? (<ShoppingForm addToList={this.addToList}/>)
+					<Route path="/form" render={() => this.props.isLogged? (<ShoppingForm addToList={this.addToList}/>)
 						:
 						(<Redirect to="/"/>)
 					}/>
-					<Route render={() => this.state.isLogged ? 
+					<Route render={() => this.props.isLogged ? 
 						(<Redirect to="list"/>)
 						:
 						(<Redirect to="/"/>)
@@ -244,4 +158,11 @@ class App extends React.Component {
 	}
 }
 
-export default App;
+const mapStateToProps = (state) => {
+	return {
+		isLogged:state.isLogged,
+		token:state.token
+	}
+}
+
+export default connect(mapStateToProps)(App);

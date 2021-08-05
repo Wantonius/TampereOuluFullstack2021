@@ -1,3 +1,5 @@
+import {getList,clearShoppingState} from './shoppingActions';
+
 //ACTION CONSTANTS
 
 export const LOADING = "LOADING";
@@ -65,6 +67,7 @@ export const login = (user) => {
 				return;
 			}
 			dispatch(loginSuccess(data.token));
+			dispatch(getList(data.token));
 		} else {
 			dispatch(loginFailed("Login failed. Server responded with a status:"+response.statusText));
 		}			
@@ -86,12 +89,15 @@ export const logout = (token) => {
 		})
 		if(!response) {
 			dispatch(logoutFailed("There was an error. Logging you out!"))
+			dispatch(clearShoppingState());
 			return;
 		}
 		if(response.ok) {
 			dispatch(logoutSuccess());
+			dispatch(clearShoppingState());
 		} else {
 			dispatch(logoutFailed("Logging you out. Server responded with a status:"+response.statusText))
+			dispatch(clearShoppingState());
 		}
 	}
 }

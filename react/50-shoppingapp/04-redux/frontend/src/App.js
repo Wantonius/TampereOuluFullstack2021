@@ -10,55 +10,9 @@ import {connect} from 'react-redux';
 
 class App extends React.Component {
 	
-	constructor(props) {
-		super(props);
-		this.state = {
-			list:[]
-		}
-	}
-
-	
-	//LOGIN API
-	
-
-
-	
 	//REST API
 	
-	getList = (search,price) => {
-		let request = {
-			method:"GET",
-			mode:"cors",
-			headers:{"Content-type":"application/json",
-					"token":this.props.token}
-		}
-		let url = "/api/shopping"
-		if(search) {
-			url = url + "?type="+search;
-			if(price) {
-				url = url + "&price="+price;
-			}
-		}
-		fetch(url,request).then(response => {
-			if(response.ok) {
-				response.json().then(data => {
-					this.setState({
-						list:data
-					})
-				}).catch(error => {
-					console.log("Failed to parse JSON, reason:"+error)
-				})
-			} else {
-				if(response.status === 403) {
-					console.log("Session has expired. Logging out!");
-				}
-				console.log("Server responded with a status:"+response.status);
-			}
-		}).catch(error => {
-			console.log(error)
-		});
-	}
-	
+
 	addToList = async (item) => {
 		let request = {
 			method:"POST",
@@ -136,10 +90,10 @@ class App extends React.Component {
 						: 
 						(<LoginPage />)
 					}/>
-					<Route path="/list" render={() => this.props.isLogged ? (<ShoppingList list={this.state.list}
+					<Route path="/list" render={() => this.props.isLogged ? (<ShoppingList 
 							removeFromList={this.removeFromList}
 							editItem={this.editItem}
-							getList={this.getList}/>)
+							/>)
 						: 
 						(<Redirect to="/"/>)
 					}/>

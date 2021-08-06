@@ -2,6 +2,8 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import ShoppingItem from './models/ShoppingItem';
+import ShoppingForm from './components/ShoppingForm';
+import ShoppingList from './components/ShoppingList';
 
 interface State {
 	list:ShoppingItem[];
@@ -37,7 +39,9 @@ class App extends React.Component<{},State> {
 	render() {
 		return (
 			<div className="App">
-
+				<ShoppingForm addToList={this.addToList}/>
+				<hr/>
+				<ShoppingList list={this.state.list} removeFromList={this.removeFromList}/>
 			</div>
 		);
 	}

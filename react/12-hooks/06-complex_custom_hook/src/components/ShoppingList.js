@@ -1,12 +1,25 @@
+import useAction from '../hooks/useaction';
+import useAppState from '../hooks/useappstate';
+import {useEffect} from 'react';
+
 const ShoppingList = (props) => {
 	
-	let items = props.list.map((item) => {
+	const {fetchList,remove} = useAction();
+	const state = useAppState();
+	
+	useEffect(() => {
+		if(state.isLogged) {
+			fetchList(state.token);
+		}
+	},[])
+	
+	let items = state.list.map((item) => {
 		return (
 			<tr key={item.id}>
 				<td>{item.type}</td>
 				<td>{item.count}</td>
 				<td>{item.price}</td>
-				<td><button onClick={() => props.removeFromList(item.id)}>Remove</button></td>
+				<td><button onClick={() => remove(state.token,item.id)}>Remove</button></td>
 			</tr>
 		)
 	})

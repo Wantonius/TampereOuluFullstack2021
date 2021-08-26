@@ -4,12 +4,15 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import StateProvider from './hooks/provider/StateProvider';
+import {BrowserRouter} from 'react-router-dom';
 
 ReactDOM.render(
   <React.StrictMode>
+  <BrowserRouter>
   <StateProvider>
     <App />
   </StateProvider>
+  </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')
 );

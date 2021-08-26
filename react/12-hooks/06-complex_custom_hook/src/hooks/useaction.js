@@ -1,4 +1,5 @@
 import {useContext,useEffect,useState,useMemo} from 'react';
+import useAppState from './useappstate';
 import ReducerContext from './context/ReducerContext';
 import {ActionConstants} from './actionconstants';
 
@@ -7,11 +8,11 @@ const useAction = () => {
 	const [urlRequest,setUrlRequest] = useState({
 		url:"",
 		request:{},
-		action:"",
-		token:""
+		action:""
 	})
 	
 	const dispatch = useContext(ReducerContext);
+	const state = useAppState();
 	
 	if(!dispatch) {
 		console.log("Needs to be under the StateProvider");
@@ -37,14 +38,7 @@ const useAction = () => {
 					dispatch({
 						type:ActionConstants.LOGIN_SUCCESS,
 						token:data.token
-					})
-					setUrlRequest({
-						url:"",
-						request:{},
-						action:"",
-						token:data.token
-					})
-					fetchList(data.token);
+					})				
 					return;
 				}
 				if(urlRequest.action === "logout") {
@@ -65,14 +59,14 @@ const useAction = () => {
 					dispatch({
 						type:ActionConstants.ADD_SUCCESS
 					})
-					fetchList(urlRequest.token);
+					fetchList(state.token);
 					return;
 				}
 				if(urlRequest.action === "remove") {
 					dispatch({
 						type:ActionConstants.REMOVE_SUCCESS
 					})
-					fetchList(urlRequest.token);
+					fetchList(state.token);
 					return;
 				}
 			} else {
@@ -156,7 +150,6 @@ const useAction = () => {
 	
 	const register = (user) => {
 		setUrlRequest({
-			...urlRequest,
 			url:"/register",
 			request:{
 				method:"POST",
@@ -170,7 +163,6 @@ const useAction = () => {
 	
 	const login = (user) => {
 		setUrlRequest({
-			...urlRequest,
 			url:"/login",
 			request:{
 				method:"POST",
@@ -184,7 +176,6 @@ const useAction = () => {
 	
 	const logout = (token) => {
 		setUrlRequest({
-			...urlRequest,
 			url:"/logout",
 			request:{
 				method:"POST",
@@ -198,7 +189,6 @@ const useAction = () => {
 
 	const fetchList = (token) => {
 		setUrlRequest({
-			...urlRequest,
 			url:"/api/shopping",
 			request:{
 				method:"GET",
@@ -212,7 +202,6 @@ const useAction = () => {
 	
 	const add = (token,item) => {
 		setUrlRequest({
-			...urlRequest,
 			url:"/api/shopping",
 			request:{
 				method:"POST",
@@ -227,7 +216,6 @@ const useAction = () => {
 	
 	const remove = (token,id) => {
 		setUrlRequest({
-			...urlRequest,
 			url:"/api/shopping/"+id,
 			request:{
 				method:"DELETE",

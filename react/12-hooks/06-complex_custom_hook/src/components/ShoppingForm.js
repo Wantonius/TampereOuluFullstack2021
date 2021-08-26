@@ -1,4 +1,6 @@
 import {useState} from 'react';
+import useAction from '../hooks/useaction';
+import useAppState from '../hooks/useappstate';
 
 const ShoppingForm = (props) => {
 	
@@ -7,6 +9,9 @@ const ShoppingForm = (props) => {
 		count:0,
 		price:0
 	})
+	
+	const {add} = useAction();
+	const state = useAppState();
 	
 	const onChange = (event) => {
 		setItem({
@@ -17,7 +22,7 @@ const ShoppingForm = (props) => {
 	
 	const onSubmit = (event) => {
 		event.preventDefault();
-		props.addToList(item);
+		add(state.token,item);
 		setItem({
 			type:"",
 			price:0,

@@ -1,0 +1,27 @@
+<form (ngSubmit)="addToList()" #contactForm="ngForm">
+	<label for="firstname">First Name</label>
+	<input type="text"
+			id="firstname"
+			name="firstname"
+			[(ngModel)]="contact.firstname"/>
+	<br/>
+	<label for="lastname">Last Name</label>
+	<input type="text"
+			id="lastname"
+			name="lastname"
+			[(ngModel)]="contact.lastname"/>
+	<br/>
+	<label for="email">Email</label>
+	<input type="email"
+			id="email"
+			name="email"
+			[(ngModel)]="contact.email"/>
+	<br/>
+	<label for="phone">Phone</label>
+	<input type="text"
+			id="phone"
+			name="phone"
+			[(ngModel)]="contact.phone"/>
+	<br/>
+	<input type="submit" value="Add Contact"/>
+</form>

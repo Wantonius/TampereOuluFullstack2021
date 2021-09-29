@@ -19,6 +19,6 @@ export class ContactService {
 	
 	removeFromList(id:number) {
 		let templist = this.contactList.filter(item => item.id !== id)
-		this.contactList = tempList;
+		this.contactList = templist;
 	}
 }

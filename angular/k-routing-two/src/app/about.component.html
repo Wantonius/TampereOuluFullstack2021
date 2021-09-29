@@ -1,0 +1,9 @@
+<h3>This is an about page</h3>
+<form (ngSubmit)="goToSecretPage()" #aboutform="ngForm">
+	<label for="name">Enter your name:</label>
+	<input type="text"
+			id="name"
+			name="name"
+			[(ngModel)]="name"/>
+	<input type="submit" value="Go to Secret page"/>
+</form>

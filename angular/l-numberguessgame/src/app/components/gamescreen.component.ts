@@ -1,7 +1,8 @@
 import {Component} from '@angular/core';
-import {GameMechanics} from './services/gamemechanics.service';
+import {GameMechanics} from '../services/gamemechanics.service';
 import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
+import {WinDialog} from './windialog.component';
 
 @Component({
 	selector:"gamescreen",
@@ -30,6 +31,19 @@ export class GameScreen {
 			this.currentHigh = this.currentGuess;
 			this.numberOfGuesses = temp.numberOfGuesses
 			return;
+		}
+		if(temp.type === "win") {
+			this.dialog.open(WinDialog, {
+				data: {
+					guesses:this.numberOfGuesses
+				}
+			})
+			this.numberOfGuesses = 0;
+			this.currentGuess = 0;
+			this.currentLow = 1;
+			this.currentHigh = 100;
+			this.message = "Please choose a number between 1 and 100";
+			this._router.navigate(['/start']);
 		}
 	}
 }

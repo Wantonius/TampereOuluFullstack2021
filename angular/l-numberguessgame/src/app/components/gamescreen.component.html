@@ -1,0 +1,9 @@
+<div style="text-align:center">
+	<h2>Number guess game</h2>
+	<h4>Game Screen</h4>
+	<p>Guess a number between {{currentLow}} and {{currentHigh}}
+	You have guessed {{numberOfGuesses}} times.</p>
+	<p>Game says:{{message}}</p>
+	<mat-slider [min]="currentLow" [max]="currentHigh" value="currentGuess"></mat-slider>
+	<button mat-raised-button (click)="guess()">Make a guess</button>
+</div>

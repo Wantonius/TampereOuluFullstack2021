@@ -42,7 +42,7 @@ export class LoginService {
 		return this._http.post<BackendMessage>("/login",user,httpOptions);
 	}
 
-	logout(username:string,password:string) {
+	logout() {
 		const httpOptions = {
 			headers: new HttpHeaders({
 				"Content-type":"application/json",

@@ -4,6 +4,7 @@
 	<p>Guess a number between {{currentLow}} and {{currentHigh}}
 	You have guessed {{numberOfGuesses}} times.</p>
 	<p>Game says:{{message}}</p>
-	<mat-slider [min]="currentLow" [max]="currentHigh" value="currentGuess"></mat-slider>
+	<p>Current value:{{currentGuess}}</p>
+	<mat-slider [min]="currentLow" [max]="currentHigh" [(ngModel)]="currentGuess"></mat-slider>
 	<button mat-raised-button (click)="guess()">Make a guess</button>
 </div>

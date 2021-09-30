@@ -10,27 +10,27 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {MatInputModule} from '@angular/material/input'; 
 import {GameMechanics} from './services/gamemechanics.service';
 import {StartScreen} from './components/startscreen.component';
+import {GameScreen} from './components/gamescreen.component';
 import {WinDialog} from './components/windialog.component';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
     AppComponent,
 	StartScreen,
-	WinDialog
+	WinDialog,
+	GameScreen
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+	FormsModule,
 	MatButtonModule,
 	MatSliderModule,
 	MatDialogModule,
 	MatInputModule
   ],
-  exports: [MatButtonModule,
-	MatSliderModule,
-	MatDialogModule,
-	MatInputModule],
   providers: [GameMechanics],
   bootstrap: [AppComponent]
 })

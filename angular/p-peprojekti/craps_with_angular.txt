@@ -39,6 +39,7 @@ Something like:
 	status:"win"/"lose"/"reroll"
 }
 
+Bonus: Use Angular Material to make the game pretty and functional
 
 CRAPS:
 https://en.wikipedia.org/wiki/Craps

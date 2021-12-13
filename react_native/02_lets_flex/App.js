@@ -1,8 +1,65 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React,{useState} from 'react';
 import { StyleSheet, Text, View, TouchableHighlight } from 'react-native';
 
-
+export default function	App() {
+	
+	const [state,setState] = useState({
+		message:"No button pressed yet"
+	})
+	
+	const changeMessage = (id) => {
+		setState({
+			message:"You pressed button "+id
+		})
+	}
+	
+	return(
+		<View style={styles.mainWindow}>
+			<View style={styles.textWindow}>
+				<Text>{state.message}</Text>
+			</View>
+			<View style={styles.container}>
+				<View style={styles.rowContainer}>
+					<TouchableHighlight style={styles.blueButton}
+						onPress={() => changeMessage(1)}>
+						<Text>1</Text>
+					</TouchableHighlight>
+					<TouchableHighlight style={styles.blueButton}
+						onPress={() => changeMessage(2)}>
+						<Text>2</Text>
+					</TouchableHighlight>
+					<TouchableHighlight style={styles.blueButton}
+						onPress={() => changeMessage(3)}>
+						<Text>3</Text>
+					</TouchableHighlight>
+					<TouchableHighlight style={styles.blueButton}
+						onPress={() => changeMessage(4)}>
+						<Text>4</Text>
+					</TouchableHighlight>
+				</View>
+				<View style={styles.rowContainer}>
+					<TouchableHighlight style={styles.blueButton}
+						onPress={() => changeMessage(5)}>
+						<Text>5</Text>
+					</TouchableHighlight>
+					<TouchableHighlight style={styles.blueButton}
+						onPress={() => changeMessage(6)}>
+						<Text>6</Text>
+					</TouchableHighlight>
+					<TouchableHighlight style={styles.blueButton}
+						onPress={() => changeMessage(7)}>
+						<Text>7</Text>
+					</TouchableHighlight>
+					<TouchableHighlight style={styles.blueButton}
+						onPress={() => changeMessage(8)}>
+						<Text>8</Text>
+					</TouchableHighlight>
+				</View>
+			</View>
+		</View>
+	)
+}
 
 const styles = StyleSheet.create({
 	mainWindow: {

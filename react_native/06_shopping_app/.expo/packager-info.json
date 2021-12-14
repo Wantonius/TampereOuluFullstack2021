@@ -1,10 +1,10 @@
 {
   "devToolsPort": 19002,
-  "expoServerPort": 19000,
-  "packagerPort": 19000,
+  "expoServerPort": null,
+  "packagerPort": null,
   "webpackServerPort": null,
   "packagerPid": null,
-  "expoServerNgrokUrl": "https://ae-7ye.anonymous.06-shopping-app.exp.direct",
-  "packagerNgrokUrl": "https://packager.ae-7ye.anonymous.06-shopping-app.exp.direct",
-  "ngrokPid": 15452
+  "expoServerNgrokUrl": null,
+  "packagerNgrokUrl": null,
+  "ngrokPid": null
 }

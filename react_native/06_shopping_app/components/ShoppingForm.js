@@ -9,7 +9,7 @@ const ShoppingForm = (props) => {
 		price:0
 	})
 	
-	addToList = () => {
+	const addToList = () => {
 		let item = {
 			...state,
 			id:0

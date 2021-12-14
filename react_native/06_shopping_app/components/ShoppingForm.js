@@ -5,8 +5,8 @@ const ShoppingForm = (props) => {
 
 	const [state,setState] = useState({
 		type:"",
-		count:0,
-		price:0
+		count:"",
+		price:""
 	})
 	
 	const addToList = () => {
@@ -17,8 +17,8 @@ const ShoppingForm = (props) => {
 		props.addToList(item);
 		setState({
 			type:"",
-			count:0,
-			price:0			
+			count:"",
+			price:""			
 		})
 	}
 

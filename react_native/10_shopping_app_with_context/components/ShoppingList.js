@@ -1,7 +1,12 @@
 import React from 'react';
 import {FlatList,View,Pressable,Text,StyleSheet} from 'react-native';
+import useAppState from '../hooks/useAppState';
+import useAction from '../hooks/useAction';
 
 const ShoppingList = (props) => {
+	
+	const {list,token} = useAppState();
+	const {removeItem} = useAction();
 
 	return(
 		<View style={styles.container}>
@@ -11,7 +16,7 @@ const ShoppingList = (props) => {
 				</Pressable>
 			</View>
 			<View style={styles.listBox}>
-				<FlatList data={props.list}
+				<FlatList data={list}
 							renderItem={
 								({item}) => {
 									return(
@@ -24,7 +29,7 @@ const ShoppingList = (props) => {
 											Price:{item.price}</Text>
 											<Pressable 
 											style={styles.buttonStyle} 
-											onPress={() => props.removeFromList(item.id)}>
+											onPress={() => removeItem(token,item.id)}>
 												<Text style={styles.textStyle}>Remove</Text>
 											</Pressable>
 										</View>

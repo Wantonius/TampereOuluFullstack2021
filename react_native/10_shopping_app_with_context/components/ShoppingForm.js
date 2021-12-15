@@ -1,8 +1,13 @@
 import React,{useState} from 'react';
 import {View,Text,Pressable,TextInput,StyleSheet} from 'react-native';
+import useAction from '../hooks/useAction';
+import useAppState from '../hooks/useAppState';
 
 const ShoppingForm = (props) => {
 
+	const {token} = useAppState();
+	const {addItem} = useAction();
+	
 	const [state,setState] = useState({
 		type:"",
 		count:"",
@@ -14,7 +19,7 @@ const ShoppingForm = (props) => {
 			...state,
 			id:0
 		}
-		props.addToList(item);
+		addItem(token,item);
 		setState({
 			type:"",
 			count:"",

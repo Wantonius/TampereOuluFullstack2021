@@ -1,0 +1,9 @@
+{
+  "webpackServerPort": 19006,
+  "expoServerPort": 19000,
+  "devToolsPort": 19002,
+  "packagerPort": 19000,
+  "expoServerNgrokUrl": "https://ca-xte.anonymous.10-shopping-app-with-context.exp.direct",
+  "packagerNgrokUrl": "https://packager.ca-xte.anonymous.10-shopping-app-with-context.exp.direct",
+  "ngrokPid": 14680
+}

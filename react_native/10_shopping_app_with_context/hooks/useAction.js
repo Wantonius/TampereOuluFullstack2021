@@ -58,11 +58,13 @@ const useAction = () => {
 						action.dispatch({
 							type:actionConstants.ADD_ITEM_SUCCESS
 						})
+						getList(token);
 						return;
 					case "removeitem":
 						action.dispatch({
 							type:actionConstants.REMOVE_ITEM_SUCCESS
 						})
+						getList(token);
 						return;
 					default:
 						return;
@@ -106,7 +108,7 @@ const useAction = () => {
 							return;
 						}
 						action.dispatch({
-							type.actionConstants.FETCH_LIST_FAILED,
+							type:actionConstants.FETCH_LIST_FAILED,
 							error:"Server responded with a status:"+response.status
 						})
 						return;						
@@ -122,7 +124,7 @@ const useAction = () => {
 							return;
 						}
 						action.dispatch({
-							type.actionConstants.ADD_ITEM_FAILED,
+							type:actionConstants.ADD_ITEM_FAILED,
 							error:"Server responded with a status:"+response.status
 						})
 						return;	
@@ -138,7 +140,7 @@ const useAction = () => {
 							return;
 						}
 						action.dispatch({
-							type.actionConstants.REMOVE_ITEM_FAILED,
+							type:actionConstants.REMOVE_ITEM_FAILED,
 							error:"Server responded with a status:"+response.status
 						})
 						return;	

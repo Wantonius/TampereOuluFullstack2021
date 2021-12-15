@@ -1,7 +1,10 @@
 import React,{useState} from 'react';
 import {View,Text,Pressable,TextInput,StyleSheet} from 'react-native';
+import useLocale from '../hooks/useLocale';
 
 const ShoppingForm = (props) => {
+	
+	const locale = useLocale();
 
 	const [state,setState] = useState({
 		type:"",
@@ -25,7 +28,7 @@ const ShoppingForm = (props) => {
 	return(
 		<View style={styles.container}>
 			<View style={styles.row}>
-				<Text style={[styles.text,styles.label]}>Type:</Text>
+				<Text style={[styles.text,styles.label]}>{locale.strings.type}:</Text>
 				<TextInput style={[styles.text,styles.input]}
 					onChangeText={(text) => setState((state) => {
 						return {
@@ -37,7 +40,7 @@ const ShoppingForm = (props) => {
 					} value={state.type}/>
 			</View>
 			<View style={styles.row}>
-				<Text style={[styles.text,styles.label]}>Count:</Text>
+				<Text style={[styles.text,styles.label]}>{locale.strings.count}:</Text>
 				<TextInput style={[styles.text,styles.input]}
 					onChangeText={(text) => setState((state) => {
 						return {
@@ -48,7 +51,7 @@ const ShoppingForm = (props) => {
 					} value={state.count} keyboardType="numeric"/>
 			</View>
 			<View style={styles.row}>
-				<Text style={[styles.text,styles.label]}>Price:</Text>
+				<Text style={[styles.text,styles.label]}>{locale.strings.price}:</Text>
 				<TextInput style={[styles.text,styles.input]}
 					onChangeText={(text) => setState((state) => {
 						return {
@@ -61,7 +64,7 @@ const ShoppingForm = (props) => {
 			<View style={styles.buttonRow}>
 				<Pressable style={styles.addButton} 
 					onPress={addToList}>
-					<Text style={styles.text}>Add</Text>
+					<Text style={styles.text}>{locale.strings.add}</Text>
 				</Pressable>
 			</View>
 		</View>

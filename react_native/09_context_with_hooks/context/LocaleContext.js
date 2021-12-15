@@ -6,14 +6,16 @@ export const localizations = {
 		count:"Count",
 		price:"Price",
 		add:"Add",
-		remove:"Remove"
+		remove:"Remove",
+		addbutton:"Add New Item"
 	},
 	fi:{
 		type:"Esine",
 		count:"Määrä",
 		price:"Hinta",
 		add:"Lisää",
-		remove:"Poista"
+		remove:"Poista",
+		addbutton:"Lisää uusi"
 	}
 }
 

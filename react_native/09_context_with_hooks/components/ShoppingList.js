@@ -1,13 +1,22 @@
 import React from 'react';
 import {FlatList,View,Pressable,Text,StyleSheet} from 'react-native';
+import useLocale from '../hooks/useLocale';
 
 const ShoppingList = (props) => {
-
+	
+	const locale = useLocale();
+	
 	return(
 		<View style={styles.container}>
 			<View style={styles.buttonBox}>
 				<Pressable style={styles.navigateButton} onPress={() => props.navigation.navigate("Add Item")}>
-					<Text style={styles.textStyle}>Add New Item</Text>
+					<Text style={styles.textStyle}>{locale.strings.addbutton}</Text>
+				</Pressable>
+				<Pressable style={styles.navigateButton} onPress={() => locale.changeLocale("en")}>
+				<Text style={styles.textStyle}>En</Text>
+				</Pressable>
+				<Pressable style={styles.navigateButton} onPress={() => locale.changeLocale("fi")}>
+				<Text style={styles.textStyle}>Fi</Text>
 				</Pressable>
 			</View>
 			<View style={styles.listBox}>
@@ -17,15 +26,15 @@ const ShoppingList = (props) => {
 									return(
 										<View style={styles.row}>
 											<Text style={styles.textStyle}>
-											Type:{item.type}</Text>
+												{locale.strings.type}:{item.type}</Text>
 											<Text style={styles.textStyle}>
-											Count:{item.count}</Text>
+												{locale.strings.count}:{item.count}</Text>
 											<Text style={styles.textStyle}>
-											Price:{item.price}</Text>
+												{locale.strings.price}:{item.price}</Text>
 											<Pressable 
 											style={styles.buttonStyle} 
 											onPress={() => props.removeFromList(item.id)}>
-												<Text style={styles.textStyle}>Remove</Text>
+												<Text style={styles.textStyle}>{locale.strings.remove}</Text>
 											</Pressable>
 										</View>
 									)
@@ -44,7 +53,7 @@ const styles = StyleSheet.create({
 	},
 	buttonBox:{
 		flex:1,
-		justifyContent:"center",
+		justifyContent:"space-evenly",
 		alignItems:"center"
 	},
 	listBox:{
